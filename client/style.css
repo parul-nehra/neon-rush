@@ -1,0 +1,259 @@
+:root {
+  --neon-cyan: #0ff;
+  --neon-magenta: #f0f;
+  --neon-purple: #90f;
+  --dark-bg: #050510;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: #000;
+  font-family: 'Orbitron', sans-serif;
+  color: #fff;
+  user-select: none;
+}
+
+#game-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+}
+
+#ui-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  pointer-events: none; /* Let clicks pass through to game when UI is hidden */
+}
+
+/* Screens */
+.screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  background: rgba(5, 5, 16, 0.85);
+  backdrop-filter: blur(5px);
+}
+
+.screen.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#hud {
+  background: none;
+  backdrop-filter: none;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+/* Typography & Glitch */
+h1, h2 {
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-purple);
+}
+
+h1.glitch {
+  font-size: 4rem;
+  font-weight: 900;
+  position: relative;
+  letter-spacing: 5px;
+}
+
+/* Buttons */
+.menu-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 300px;
+}
+
+.btn {
+  background: transparent;
+  border: 2px solid var(--neon-cyan);
+  color: var(--neon-cyan);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.2rem;
+  padding: 15px 30px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  font-weight: bold;
+  pointer-events: auto;
+}
+
+.btn:hover {
+  background: var(--neon-cyan);
+  color: var(--dark-bg);
+  box-shadow: 0 0 15px var(--neon-cyan);
+}
+
+.btn.primary {
+  border-color: var(--neon-magenta);
+  color: var(--neon-magenta);
+}
+.btn.primary:hover {
+  background: var(--neon-magenta);
+  color: var(--dark-bg);
+  box-shadow: 0 0 15px var(--neon-magenta);
+}
+
+/* HUD elements */
+.hud-top {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-shadow: 0 0 5px var(--neon-cyan);
+}
+
+.hud-bottom {
+  width: 100%;
+  padding-bottom: 20px;
+}
+
+.health-bar {
+  width: 100%;
+  max-width: 400px;
+  height: 20px;
+  border: 2px solid var(--neon-magenta);
+  margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px var(--neon-magenta);
+}
+
+.health-fill {
+  width: 100%;
+  height: 100%;
+  background: var(--neon-magenta);
+  transition: width 0.1s linear;
+}
+
+/* Auth Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.8);
+  pointer-events: auto;
+}
+
+.modal.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: var(--dark-bg);
+  border: 1px solid var(--neon-cyan);
+  padding: 30px;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+  box-shadow: 0 0 20px var(--neon-cyan);
+}
+
+.close-btn {
+  color: var(--neon-cyan);
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#auth-form input {
+  padding: 10px;
+  background: rgba(0,255,255,0.1);
+  border: 1px solid var(--neon-cyan);
+  color: #fff;
+  font-family: 'Orbitron', sans-serif;
+  outline: none;
+}
+
+#auth-form input:focus {
+  box-shadow: 0 0 10px var(--neon-cyan);
+}
+
+.auth-toggle {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.auth-toggle a {
+  color: var(--neon-magenta);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.auth-status {
+  margin-top: 2rem;
+  color: var(--neon-cyan);
+  font-size: 1rem;
+}
+
+.error-msg {
+  color: #f55;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* Leaderboard */
+.leaderboard-list {
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 2rem;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.lb-entry {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid rgba(0,255,255,0.3);
+  font-size: 1.2rem;
+}
+.lb-entry:nth-child(1) { color: #ffd700; text-shadow: 0 0 5px #ffd700; }
+.lb-entry:nth-child(2) { color: #c0c0c0; }
+.lb-entry:nth-child(3) { color: #cd7f32; }

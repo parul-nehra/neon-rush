@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Neon Rush | 3D Endless Runner</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <!-- 3D Canvas Container -->
+    <div id="game-container"></div>
+
+    <!-- UI Overlay -->
+    <div id="ui-layer">
+      
+      <!-- Main Menu -->
+      <div id="main-menu" class="screen active">
+        <h1 class="glitch" data-text="NEON RUSH">NEON RUSH</h1>
+        <div class="menu-options">
+          <button id="btn-start" class="btn primary">START GAME</button>
+          <button id="btn-leaderboard" class="btn">LEADERBOARD</button>
+          <button id="btn-auth" class="btn">LOGIN / REGISTER</button>
+        </div>
+        <div class="auth-status" id="auth-status-display">Playing as Guest</div>
+      </div>
+
+      <!-- HUD (Heads Up Display) -->
+      <div id="hud" class="screen">
+        <div class="hud-top">
+          <div class="score-display">SCORE: <span id="current-score">0</span></div>
+          <div class="multiplier-display">x<span id="current-multiplier">1</span></div>
+        </div>
+        <div class="hud-bottom">
+          <div class="health-bar">
+            <div class="health-fill" id="health-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game Over Screen -->
+      <div id="game-over" class="screen">
+        <h2>CRASHED</h2>
+        <div class="final-score">FINAL SCORE: <span id="final-score-val">0</span></div>
+        <div class="menu-options">
+          <button id="btn-restart" class="btn primary">PLAY AGAIN</button>
+          <button id="btn-menu-return" class="btn">MAIN MENU</button>
+        </div>
+      </div>
+
+      <!-- Leaderboard Screen -->
+      <div id="leaderboard-screen" class="screen">
+        <h2>GLOBAL RANKINGS</h2>
+        <div class="leaderboard-list" id="leaderboard-list">
+          <div class="loading">Loading...</div>
+        </div>
+        <button id="btn-close-leaderboard" class="btn">BACK</button>
+      </div>
+
+      <!-- Auth Modal -->
+      <div id="auth-modal" class="modal">
+        <div class="modal-content">
+          <span class="close-btn" id="close-auth">&times;</span>
+          <h2 id="auth-title">LOGIN</h2>
+          <form id="auth-form">
+            <input type="text" id="auth-username" placeholder="Username" required minlength="3">
+            <input type="password" id="auth-password" placeholder="Password" required minlength="6">
+            <button type="submit" class="btn primary" id="auth-submit">LOGIN</button>
+          </form>
+          <div class="auth-toggle">
+            <a href="#" id="toggle-auth-mode">Need an account? Register</a>
+          </div>
+          <div id="auth-error" class="error-msg"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
