@@ -62,6 +62,14 @@ document.addEventListener('DOMContentLoaded', () => {
     showScreen('menu');
   });
 
+  // Settings
+  const sensSlider = document.getElementById('sensitivity-slider');
+  sensSlider.addEventListener('input', (e) => {
+    if (game && game.player) {
+      game.player.lateralSpeed = parseFloat(e.target.value);
+    }
+  });
+
   // Leaderboard
   document.getElementById('btn-leaderboard').addEventListener('click', async () => {
     showScreen('leaderboard');

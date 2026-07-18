@@ -52,9 +52,10 @@ export class Track {
     const lines = new THREE.LineSegments(edges, lineMaterial);
     mesh.add(lines);
 
-    // Spawn obstacles (don't spawn on very first segment to give player time)
-    if (zOffset < -this.segmentLength) {
-      if (Math.random() > 0.3) {
+    // Spawn obstacles during initialization, leaving the first 30-50 units clear for a 2+ seconds runway
+    if (zOffset <= -50) {
+      const numObstacles = Math.floor(Math.random() * 3) + 1; // 1 to 3 obstacles
+      for (let i = 0; i < numObstacles; i++) {
         this.spawnObstacle(zOffset);
       }
       if (Math.random() > 0.5) {
@@ -88,7 +89,7 @@ export class Track {
     this.collectibles.push({ mesh, active: true });
   }
 
-  update(playerZ) {
+  update(playerZ, elapsedTime) {
     // Recycle segments that are behind the player
     const firstSegment = this.segments[0];
     if (playerZ < firstSegment.position.z - this.segmentLength) {
@@ -102,8 +103,11 @@ export class Track {
       this.segments.push(this.segments.shift());
       
       // Spawn new stuff on recycled segment
-      if (Math.random() > 0.3) {
-        this.spawnObstacle(firstSegment.position.z);
+      if (elapsedTime > 2) {
+        const numObstacles = Math.floor(Math.random() * 3) + 1; // 1 to 3 obstacles
+        for (let i = 0; i < numObstacles; i++) {
+          this.spawnObstacle(firstSegment.position.z);
+        }
       }
       if (Math.random() > 0.5) {
         this.spawnCollectible(firstSegment.position.z);

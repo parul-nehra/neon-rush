@@ -4,19 +4,24 @@ export class Player {
   constructor(scene) {
     this.scene = scene;
     
-    // Create spaceship mesh
-    const geometry = new THREE.ConeGeometry(0.5, 2, 4);
-    geometry.rotateX(Math.PI / 2); // point forward
+    // Create spaceship mesh (sleek crystal shape)
+    const geometry = new THREE.IcosahedronGeometry(0.7, 0);
+    geometry.scale(1, 0.5, 1.5);
     
     const material = new THREE.MeshStandardMaterial({ 
-      color: 0x00ffff,
-      emissive: 0x00ffff,
-      emissiveIntensity: 0.5,
+      color: 0x000000,
+      emissive: 0x000000,
       metalness: 0.8,
       roughness: 0.2
     });
     
     this.mesh = new THREE.Mesh(geometry, material);
+    
+    // Add neon wireframe overlay
+    const wireframeGeo = new THREE.EdgesGeometry(geometry);
+    const wireframeMat = new THREE.LineBasicMaterial({ color: 0x00ffff, linewidth: 2 });
+    const wireframe = new THREE.LineSegments(wireframeGeo, wireframeMat);
+    this.mesh.add(wireframe);
     this.mesh.position.set(0, 0.5, 5); // Start position
     this.scene.add(this.mesh);
 

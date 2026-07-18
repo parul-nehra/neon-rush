@@ -46,6 +46,24 @@ export class Game {
     const dirLight = new THREE.DirectionalLight(0xff00ff, 1);
     dirLight.position.set(10, 20, 10);
     this.scene.add(dirLight);
+
+    // Starry background
+    const starGeo = new THREE.BufferGeometry();
+    const starCount = 2000;
+    const posArray = new Float32Array(starCount * 3);
+    for(let i = 0; i < starCount * 3; i++) {
+      posArray[i] = (Math.random() - 0.5) * 800; // x, y, z
+    }
+    starGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    const starMat = new THREE.PointsMaterial({
+      size: 1.0,
+      color: 0x00ffff,
+      transparent: true,
+      opacity: 0.8,
+      sizeAttenuation: true
+    });
+    this.stars = new THREE.Points(starGeo, starMat);
+    this.scene.add(this.stars);
   }
 
   start() {
@@ -72,7 +90,7 @@ export class Game {
 
     if (this.isRunning) {
       this.player.update(dt, this.input);
-      this.track.update(this.player.mesh.position.z);
+      this.track.update(this.player.mesh.position.z, this.clock.getElapsedTime());
       
       // Camera follow
       this.camera.position.x = this.player.mesh.position.x * 0.5;
@@ -84,6 +102,9 @@ export class Game {
         this.player.mesh.position.z - 10
       );
       
+      // Move stars with player to create parallax or keep them around
+      this.stars.position.z = this.camera.position.z;
+
       this.checkCollisions();
       
       // Update score
@@ -102,8 +123,8 @@ export class Game {
     for (const obs of this.track.obstacles) {
       const obsBox = new THREE.Box3().setFromObject(obs);
       if (playerBox.intersectsBox(obsBox)) {
-        // Hit obstacle
-        this.health -= 20;
+        // Hit obstacle - Game over in 3 hits (34 damage each)
+        this.health -= 34;
         this.ui.updateHealth(this.health);
         this.multiplier = 1;
         this.ui.updateMultiplier(this.multiplier);
