@@ -147,7 +147,19 @@ export class Track {
     this.collectibles = [];
     
     this.segments.forEach((seg, i) => {
-      seg.position.z = -i * this.segmentLength;
+      const zOffset = -i * this.segmentLength;
+      seg.position.z = zOffset;
+      
+      // Respawn initial obstacles for the new run
+      if (zOffset <= -50) {
+        const numObstacles = Math.floor(Math.random() * 3) + 1;
+        for (let j = 0; j < numObstacles; j++) {
+          this.spawnObstacle(zOffset);
+        }
+        if (Math.random() > 0.5) {
+          this.spawnCollectible(zOffset);
+        }
+      }
     });
   }
 }

@@ -17,7 +17,6 @@ export class Game {
     
     this.score = 0;
     this.multiplier = 1;
-    this.health = 100;
     
     this.isRunning = false;
     this.clock = new THREE.Clock();
@@ -31,8 +30,8 @@ export class Game {
 
   initThree() {
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x050510);
-    this.scene.fog = new THREE.FogExp2(0x050510, 0.015);
+    this.scene.background = new THREE.Color(0x0a0520); // Deep purple/blue synthwave background
+    this.scene.fog = new THREE.FogExp2(0x0a0520, 0.012); // Lighter fog so stars show through
     
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     
@@ -51,18 +50,18 @@ export class Game {
 
     // Starry background
     const starGeo = new THREE.BufferGeometry();
-    const starCount = 2000;
+    const starCount = 5000; // Increased star count
     const posArray = new Float32Array(starCount * 3);
     for(let i = 0; i < starCount * 3; i++) {
       posArray[i] = (Math.random() - 0.5) * 800; // x, y, z
     }
     starGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
     const starMat = new THREE.PointsMaterial({
-      size: 1.0,
-      color: 0x00ffff,
+      size: 3.0, // Increased size for visibility
+      color: 0xffffff,
       transparent: true,
-      opacity: 0.8,
-      sizeAttenuation: true
+      opacity: 0.9,
+      sizeAttenuation: false
     });
     this.stars = new THREE.Points(starGeo, starMat);
     this.scene.add(this.stars);
@@ -73,13 +72,11 @@ export class Game {
     this.track.reset();
     this.score = 0;
     this.multiplier = 1;
-    this.health = 100;
     this.gameTime = 0;
     this.isRunning = true;
     this.clock.start();
     this.ui.updateScore(this.score);
     this.ui.updateMultiplier(this.multiplier);
-    this.ui.updateHealth(this.health);
   }
 
   stop() {
@@ -140,20 +137,9 @@ export class Game {
     for (const obs of this.track.obstacles) {
       const obsBox = new THREE.Box3().setFromObject(obs);
       if (playerBox.intersectsBox(obsBox)) {
-        // Hit obstacle - Game over in 3 hits (34 damage each)
-        this.health -= 34;
-        this.ui.updateHealth(this.health);
-        this.multiplier = 1;
-        this.ui.updateMultiplier(this.multiplier);
-        
-        // Push obstacle away to avoid multi-hit
-        obs.position.y -= 10;
-        
-        // Shake effect could go here
-        
-        if (this.health <= 0) {
-          this.stop();
-        }
+        // Hit obstacle - Game over immediately (1 hit)
+        this.stop();
+        return; // exit loop
       }
     }
     

@@ -17,8 +17,7 @@ const screens = {
 
 const hudElements = {
   score: document.getElementById('current-score'),
-  multiplier: document.getElementById('current-multiplier'),
-  healthFill: document.getElementById('health-fill')
+  multiplier: document.getElementById('current-multiplier')
 };
 
 const authStatusDisplay = document.getElementById('auth-status-display');
@@ -37,7 +36,6 @@ const container = document.getElementById('game-container');
 game = new Game(container, {
   updateScore: (val) => hudElements.score.innerText = val,
   updateMultiplier: (val) => hudElements.multiplier.innerText = val,
-  updateHealth: (val) => hudElements.healthFill.style.width = `${val}%`,
   onGameOver: async (finalScore) => {
     showScreen('gameOver');
     document.getElementById('final-score-val').innerText = finalScore;
@@ -80,6 +78,19 @@ document.getElementById('btn-resume').addEventListener('click', () => {
 document.getElementById('btn-quit').addEventListener('click', () => {
   game.quit();
   showScreen('menu');
+});
+
+// Global keyboard listener for Pause
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (game && game.isRunning) {
+      game.pause();
+      showScreen('pause');
+    } else if (game && !game.isRunning && screens.pause.classList.contains('active')) {
+      showScreen('hud');
+      game.resume();
+    }
+  }
 });
 
 // Settings
