@@ -62,6 +62,22 @@ document.addEventListener('DOMContentLoaded', () => {
     showScreen('menu');
   });
 
+  // Pause Menu
+  document.getElementById('btn-pause').addEventListener('click', () => {
+    game.pause();
+    showScreen('pause-screen');
+  });
+
+  document.getElementById('btn-resume').addEventListener('click', () => {
+    showScreen('hud');
+    game.resume();
+  });
+
+  document.getElementById('btn-quit').addEventListener('click', () => {
+    game.quit();
+    showScreen('menu');
+  });
+
   // Settings
   const sensSlider = document.getElementById('sensitivity-slider');
   sensSlider.addEventListener('input', (e) => {

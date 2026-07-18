@@ -21,6 +21,7 @@ export class Game {
     
     this.isRunning = false;
     this.clock = new THREE.Clock();
+    this.gameTime = 0;
     
     window.addEventListener('resize', this.onWindowResize.bind(this));
     
@@ -30,7 +31,8 @@ export class Game {
 
   initThree() {
     this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.FogExp2(0x000000, 0.02);
+    this.scene.background = new THREE.Color(0x050510);
+    this.scene.fog = new THREE.FogExp2(0x050510, 0.015);
     
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     
@@ -72,6 +74,7 @@ export class Game {
     this.score = 0;
     this.multiplier = 1;
     this.health = 100;
+    this.gameTime = 0;
     this.isRunning = true;
     this.clock.start();
     this.ui.updateScore(this.score);
@@ -84,13 +87,27 @@ export class Game {
     this.ui.onGameOver(Math.floor(this.score));
   }
 
+  pause() {
+    this.isRunning = false;
+  }
+
+  resume() {
+    this.isRunning = true;
+    this.clock.getDelta(); // Consume time spent paused
+  }
+
+  quit() {
+    this.isRunning = false;
+  }
+
   animate() {
     this.perf.update();
     const dt = this.clock.getDelta();
 
     if (this.isRunning) {
+      this.gameTime += dt;
       this.player.update(dt, this.input);
-      this.track.update(this.player.mesh.position.z, this.clock.getElapsedTime());
+      this.track.update(this.player.mesh.position.z, this.gameTime);
       
       // Camera follow
       this.camera.position.x = this.player.mesh.position.x * 0.5;
