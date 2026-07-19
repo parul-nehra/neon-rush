@@ -97,7 +97,7 @@ export class Track {
       const lastSegmentZ = this.segments[this.segments.length - 1].position.z;
       
       // Clean up old obstacles/collectibles on this segment
-      this.cleanupEntities(firstSegment.position.z);
+      this.cleanupEntities(playerZ);
       
       firstSegment.position.z = lastSegmentZ - this.segmentLength;
       this.segments.push(this.segments.shift());
@@ -123,18 +123,20 @@ export class Track {
     });
   }
 
-  cleanupEntities(zThreshold) {
-    // Remove obstacles behind player
+  cleanupEntities(playerZ) {
+    // Remove obstacles that are far behind the player (player moves in negative Z)
     for (let i = this.obstacles.length - 1; i >= 0; i--) {
-      if (this.obstacles[i].position.z > zThreshold + this.segmentLength) {
-        this.scene.remove(this.obstacles[i]);
+      const obs = this.obstacles[i];
+      if (obs.position.z > playerZ + 20) {
+        this.scene.remove(obs);
         this.obstacles.splice(i, 1);
       }
     }
-    // Remove collectibles behind player
+    // Remove collectibles that are far behind the player
     for (let i = this.collectibles.length - 1; i >= 0; i--) {
-      if (this.collectibles[i].mesh.position.z > zThreshold + this.segmentLength) {
-        this.scene.remove(this.collectibles[i].mesh);
+      const col = this.collectibles[i];
+      if (col.mesh.position.z > playerZ + 20) {
+        this.scene.remove(col.mesh);
         this.collectibles.splice(i, 1);
       }
     }

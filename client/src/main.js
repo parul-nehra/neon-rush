@@ -33,6 +33,7 @@ const showScreen = (screenName) => {
 
 // Game setup
 const container = document.getElementById('game-container');
+container.innerHTML = ''; // Fix for HMR creating duplicate canvases
 game = new Game(container, {
   updateScore: (val) => hudElements.score.innerText = val,
   updateMultiplier: (val) => hudElements.multiplier.innerText = val,
