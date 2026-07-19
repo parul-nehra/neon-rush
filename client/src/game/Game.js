@@ -50,15 +50,37 @@ export class Game {
 
     // Starry background
     const starGeo = new THREE.BufferGeometry();
-    const starCount = 5000; // Increased star count
+    const starCount = 15000; // Massively increased star count
     const posArray = new Float32Array(starCount * 3);
-    for(let i = 0; i < starCount * 3; i++) {
-      posArray[i] = (Math.random() - 0.5) * 800; // x, y, z
+    const colorArray = new Float32Array(starCount * 3);
+    
+    // Synthwave color palette for stars
+    const colors = [
+      new THREE.Color(0xff00ff), // Magenta
+      new THREE.Color(0x00ffff), // Cyan
+      new THREE.Color(0xffffff), // White
+      new THREE.Color(0x8a2be2)  // Purple
+    ];
+
+    for(let i = 0; i < starCount; i++) {
+      // Position
+      posArray[i * 3] = (Math.random() - 0.5) * 1000;     // x
+      posArray[i * 3 + 1] = (Math.random() - 0.5) * 1000; // y
+      posArray[i * 3 + 2] = (Math.random() - 0.5) * 1000; // z
+      
+      // Color
+      const c = colors[Math.floor(Math.random() * colors.length)];
+      colorArray[i * 3] = c.r;
+      colorArray[i * 3 + 1] = c.g;
+      colorArray[i * 3 + 2] = c.b;
     }
+    
     starGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    starGeo.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+    
     const starMat = new THREE.PointsMaterial({
-      size: 3.0, // Increased size for visibility
-      color: 0xffffff,
+      size: 3.0, 
+      vertexColors: true, // Use the colors array
       transparent: true,
       opacity: 0.9,
       sizeAttenuation: false
